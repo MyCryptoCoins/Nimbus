@@ -96,7 +96,7 @@ endif
 
 # CXXFLAGS can be specified on the make command line, so we use xCXXFLAGS that only
 # adds some defaults in front. Unfortunately, CXXFLAGS=... $(CXXFLAGS) does not work.
-xCXXFLAGS=-O2 $(EXT_OPTIONS) -pthread -Wall -Wextra -Wno-ignored-qualifiers -Wformat -Wformat-security -Wno-unused-parameter \
+xCXXFLAGS=-O2 $(EXT_OPTIONS) -std=c++11 -pthread -Wall -Wextra -Wno-ignored-qualifiers -Wformat -Wformat-security -Wno-unused-parameter \
     $(DEBUGFLAGS) $(DEFS) $(HARDENING) $(CXXFLAGS)
 
 # LDFLAGS can be specified on the make command line, so we use xLDFLAGS that only
@@ -104,7 +104,7 @@ xCXXFLAGS=-O2 $(EXT_OPTIONS) -pthread -Wall -Wextra -Wno-ignored-qualifiers -Wfo
 xLDFLAGS=$(LDHARDENING) $(LDFLAGS)
 
 OBJS= \
-   obj/groestl.o \
+    obj/groestl.o \
     obj/blake.o \
     obj/bmw.o \
     obj/skein.o \
@@ -115,9 +115,9 @@ OBJS= \
     obj/cubehash.o \
     obj/echo.o \
     obj/simd.o \
-	obj/hamsi.o \
-	obj/fugue.o \
-	obj/shabal.o\
+    obj/hamsi.o \
+    obj/fugue.o \
+    obj/shabal.o\
     obj/whirlpool.o \
     obj/alert.o \
     obj/version.o \
@@ -155,6 +155,8 @@ OBJS= \
     obj/scrypt-x86_64.o 
 
 all: Nimbusd
+
+Nimbusd:: leveldb/libleveldb.a obj
 
 LIBS += $(CURDIR)/leveldb/libleveldb.a $(CURDIR)/leveldb/libmemenv.a
 DEFS += $(addprefix -I,$(CURDIR)/leveldb/include)
@@ -195,7 +197,10 @@ obj/%.o: %.cpp
 	      -e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
 	  rm -f $(@:%.o=%.d)
 
-Nimbusd: $(OBJS:obj/%=obj/%)
+obj:
+	mkdir -p $@
+
+Nimbusd:: $(OBJS:obj/%=obj/%)
 	$(LINK) $(xCXXFLAGS) -o $@ $^ $(xLDFLAGS) $(LIBS)
 
 clean:

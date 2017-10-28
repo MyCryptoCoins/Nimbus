@@ -3389,7 +3389,7 @@ sph_whirlpool_init(void *cc)
 {
 	sph_whirlpool_context *sc;
 
-	sc = cc;
+	sc = (sph_whirlpool_context *)cc;
 	/*
 	 * We want to set all eight 64-bit words to 0. A "memset()"
 	 * is not, theoretically, fully standard, but in practice it
@@ -3465,7 +3465,7 @@ sph_ ## name ## _close(void *cc, void *dst) \
 	int i; \
  \
 	name ## _close(cc, dst, 0); \
-	sc = cc; \
+	sc = (sph_ ## name ## _context *)cc; \
 	for (i = 0; i < 8; i ++) \
 		sph_enc64le((unsigned char *)dst + 8 * i, sc->state[i]); \
 	sph_ ## name ## _init(cc); \

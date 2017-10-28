@@ -1562,7 +1562,7 @@ init_small(void *cc, const u32 *iv)
 {
 	sph_simd_small_context *sc;
 
-	sc = cc;
+	sc = (sph_simd_small_context *)cc;
 	memcpy(sc->state, iv, sizeof sc->state);
 	sc->count_low = sc->count_high = 0;
 	sc->ptr = 0;
@@ -1573,7 +1573,7 @@ init_big(void *cc, const u32 *iv)
 {
 	sph_simd_big_context *sc;
 
-	sc = cc;
+	sc = (sph_simd_big_context *)cc;
 	memcpy(sc->state, iv, sizeof sc->state);
 	sc->count_low = sc->count_high = 0;
 	sc->ptr = 0;
@@ -1584,7 +1584,7 @@ update_small(void *cc, const void *data, size_t len)
 {
 	sph_simd_small_context *sc;
 
-	sc = cc;
+	sc = (sph_simd_small_context *)cc;
 	while (len > 0) {
 		size_t clen;
 
@@ -1609,7 +1609,7 @@ update_big(void *cc, const void *data, size_t len)
 {
 	sph_simd_big_context *sc;
 
-	sc = cc;
+	sc = (sph_simd_big_context *)cc;
 	while (len > 0) {
 		size_t clen;
 
@@ -1658,7 +1658,7 @@ finalize_small(void *cc, unsigned ub, unsigned n, void *dst, size_t dst_len)
 	unsigned char *d;
 	size_t u;
 
-	sc = cc;
+	sc = (sph_simd_small_context *)cc;
 	if (sc->ptr > 0 || n > 0) {
 		memset(sc->buf + sc->ptr, 0,
 			(sizeof sc->buf) - sc->ptr);
@@ -1680,7 +1680,7 @@ finalize_big(void *cc, unsigned ub, unsigned n, void *dst, size_t dst_len)
 	unsigned char *d;
 	size_t u;
 
-	sc = cc;
+	sc = (sph_simd_big_context *)cc;
 	if (sc->ptr > 0 || n > 0) {
 		memset(sc->buf + sc->ptr, 0,
 			(sizeof sc->buf) - sc->ptr);
@@ -1698,13 +1698,13 @@ finalize_big(void *cc, unsigned ub, unsigned n, void *dst, size_t dst_len)
 void
 sph_simd224_init(void *cc)
 {
-	init_small(cc, IV224);
+	init_small((sph_simd_small_context *)cc, IV224);
 }
 
 void
 sph_simd224(void *cc, const void *data, size_t len)
 {
-	update_small(cc, data, len);
+	update_small((sph_simd_small_context *)cc, data, len);
 }
 
 void
@@ -1716,20 +1716,20 @@ sph_simd224_close(void *cc, void *dst)
 void
 sph_simd224_addbits_and_close(void *cc, unsigned ub, unsigned n, void *dst)
 {
-	finalize_small(cc, ub, n, dst, 7);
+	finalize_small((sph_simd_small_context *)cc, ub, n, dst, 7);
 	sph_simd224_init(cc);
 }
 
 void
 sph_simd256_init(void *cc)
 {
-	init_small(cc, IV256);
+	init_small((sph_simd_small_context *)cc, IV256);
 }
 
 void
 sph_simd256(void *cc, const void *data, size_t len)
 {
-	update_small(cc, data, len);
+	update_small((sph_simd_small_context *)cc, data, len);
 }
 
 void
@@ -1741,20 +1741,20 @@ sph_simd256_close(void *cc, void *dst)
 void
 sph_simd256_addbits_and_close(void *cc, unsigned ub, unsigned n, void *dst)
 {
-	finalize_small(cc, ub, n, dst, 8);
+	finalize_small((sph_simd_small_context *)cc, ub, n, dst, 8);
 	sph_simd256_init(cc);
 }
 
 void
 sph_simd384_init(void *cc)
 {
-	init_big(cc, IV384);
+	init_big((sph_simd_big_context *)cc, IV384);
 }
 
 void
 sph_simd384(void *cc, const void *data, size_t len)
 {
-	update_big(cc, data, len);
+	update_big((sph_simd_big_context *)cc, data, len);
 }
 
 void
@@ -1766,20 +1766,20 @@ sph_simd384_close(void *cc, void *dst)
 void
 sph_simd384_addbits_and_close(void *cc, unsigned ub, unsigned n, void *dst)
 {
-	finalize_big(cc, ub, n, dst, 12);
+	finalize_big((sph_simd_big_context *)cc, ub, n, dst, 12);
 	sph_simd384_init(cc);
 }
 
 void
 sph_simd512_init(void *cc)
 {
-	init_big(cc, IV512);
+	init_big((sph_simd_big_context *)cc, IV512);
 }
 
 void
 sph_simd512(void *cc, const void *data, size_t len)
 {
-	update_big(cc, data, len);
+	update_big((sph_simd_big_context *)cc, data, len);
 }
 
 void
@@ -1791,7 +1791,7 @@ sph_simd512_close(void *cc, void *dst)
 void
 sph_simd512_addbits_and_close(void *cc, unsigned ub, unsigned n, void *dst)
 {
-	finalize_big(cc, ub, n, dst, 16);
+	finalize_big((sph_simd_big_context *)cc, ub, n, dst, 16);
 	sph_simd512_init(cc);
 }
 #ifdef __cplusplus

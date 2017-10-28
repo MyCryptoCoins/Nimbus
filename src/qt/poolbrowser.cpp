@@ -373,7 +373,8 @@ void PoolBrowser::bittrexMarketSummary(QNetworkReply* response)
 void PoolBrowser::bittrexTrades(QNetworkReply* response)
 {
     int z = 0;
-    double high, low = 100000;
+    double high = 0;
+    double low = 100000;
 
     ui->tblBittrexTrades->clear();
     ui->tblBittrexTrades->setColumnWidth(0, 60);

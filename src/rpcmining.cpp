@@ -22,6 +22,7 @@ Value getsubsidy(const Array& params, bool fHelp)
             "getsubsidy [nTarget]\n"
             "Returns proof-of-work subsidy value for the specified value of target.");
 
+#if  0
     unsigned int nBits = 0;
 
     if (params.size() != 0)
@@ -33,6 +34,7 @@ Value getsubsidy(const Array& params, bool fHelp)
     {
         nBits = GetNextTargetRequired(pindexBest, false);
     }
+#endif
 
     return (uint64_t)GetProofOfWorkReward(0);
 }

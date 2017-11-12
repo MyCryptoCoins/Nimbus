@@ -52,7 +52,7 @@ PoolBrowser::PoolBrowser(QWidget* parent) : QWidget(parent), ui(new Ui::PoolBrow
     QObject::connect(&m_nam, SIGNAL(finished(QNetworkReply*)), this, SLOT(parseNetworkResponse(QNetworkReply*)), Qt::AutoConnection);
 
     //One time primer
-    pollAPIs();
+    //pollAPIs();
 }
 
 void PoolBrowser::on_btnConvertSilkoin_clicked()
@@ -67,7 +67,7 @@ void PoolBrowser::on_btnConvertSilkoin_clicked()
 }
 void PoolBrowser::on_btnUpdateMarketData_clicked()
 {
-    pollAPIs();
+    //pollAPIs();
 }
 
 void PoolBrowser::openBittrex()
